@@ -162,8 +162,6 @@ admin.require-login: Требовать авторизацию
 admin.require-login_help: Запретить просмотр фрагментов без авторизации.
 admin.disable-login: Запретить авторизацию по паролю
 admin.disable-login_help: Запретить авторизацию с вводом пароля, форсировать внешнюю авторизацию через Gitea/GitHub.
-admin.disable-gravatar: Запретить Gravatar
-admin.disable-gravatar_help: Запретить использование Gravatar как провайдера изображений профиля.
 admin.allow-gists-without-login: Разрешить доступ к отдельным фрагментам без авторизации
 admin.allow-gists-without-login_help: Разрешает просматривать и скачивать отдельные фрагменты без входа, но требует авторизацию для поиска фрагментов.
 admin.users.delete_confirm: Вы уверены что хотите удалить этого пользователя?

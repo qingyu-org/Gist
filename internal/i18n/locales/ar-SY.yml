@@ -309,8 +309,6 @@ admin.allow-gists-without-login: السماح بالمقاطع الفردية د
 admin.allow-gists-without-login_help: السماح بعرض وتنزيل المقاطع الفردية دون تسجيل دخول، مع طلب تسجيل الدخول لاستكشاف المقاطع.
 admin.disable-login: تعطيل نموذج تسجيل الدخول
 admin.disable-login_help: منع تسجيل الدخول عبر النموذج لإجبار استخدام مزوّدي OAuth بدلًا من ذلك.
-admin.disable-gravatar: تعطيل Gravatar
-admin.disable-gravatar_help: تعطيل استخدام Gravatar كمزوّد للصور الرمزية.
 
 admin.users.delete_confirm: هل تريد حذف هذا المستخدم؟
 

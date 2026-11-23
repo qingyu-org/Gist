@@ -205,8 +205,6 @@ admin.allow-gists-without-login: 'Permetti di creare gists individuali senza log
 admin.allow-gists-without-login_help: 'Permetti di visualizzare e scaricare gists individuali senza essere loggati, ma richiedi il login per scoprire nuovi gists.'
 admin.disable-login: 'Disabilita form di login'
 admin.disable-login_help: 'Blocca il login tramite form per forzare l''accesso tramite Oauth.'
-admin.disable-gravatar: 'Disabilita Gravatar'
-admin.disable-gravatar_help: 'Disabilita Gravatar come provider di avatar.'
 
 admin.users.delete_confirm: 'Vuoi eliminare questo utente?'
 

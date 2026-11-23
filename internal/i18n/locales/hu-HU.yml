@@ -182,8 +182,6 @@ admin.require-login: Bejelentkezés szükséges
 admin.require-login_help: Csak bejelentkezett felhasználók láthatják a gisteket.
 admin.disable-login: Bejelentkezés űrlap letiltása
 admin.disable-login_help: Letiltja a bejelentkezés űrlapon keresztüli bejelentkezéseket, OAuth szolgáltatókat ajánlva helyette.
-admin.disable-gravatar: Gravatar kikapcsolása
-admin.disable-gravatar_help: Tiltsd le a Gravatar-t mint profilkép szolgáltató.
 admin.allow-gists-without-login:
 admin.allow-gists-without-login_help:
 admin.users.delete_confirm: Biztosan törlöd ezt a felhasználót?

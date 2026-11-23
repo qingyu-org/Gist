@@ -162,8 +162,6 @@ admin.require-login: Exiger la connexion
 admin.require-login_help: Obliger les utilisateurs à être connectés pour voir les gists.
 admin.disable-login: Désactiver le formulaire de connexion
 admin.disable-login_help: Interdire la connexion via le formulaire de connexion pour forcer l'utilisation des fournisseurs OAuth à la place.
-admin.disable-gravatar: Désactiver Gravatar
-admin.disable-gravatar_help: Désactiver l'utilisation de Gravatar comme fournisseur d'avatar.
 admin.allow-gists-without-login: Autoriser les gists individuelles sans login
 admin.allow-gists-without-login_help: Autoriser la visualisation et le téléchargement de gists individuels sans connexion, tout en exigeant une connexion pour la découverte de gists.
 admin.users.delete_confirm: Voulez-vous supprimer cet utilisateur ?

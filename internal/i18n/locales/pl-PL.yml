@@ -241,8 +241,6 @@ admin.allow-gists-without-login: 'Zezwól na indywidualne Gisty bez logowania'
 admin.allow-gists-without-login_help: 'Zezwalaj na przeglądanie i pobieranie pojedynczych Gistów bez logowania, ale wymagaj zalogowania się w celu odkrywania Gistów.'
 admin.disable-login: 'Wyłącz formularz logowania'
 admin.disable-login_help: 'Zabroń logowania się za pomocą formularza logowania, aby wymusić korzystanie z dostawców OAuth.'
-admin.disable-gravatar: 'Wyłącz Gravatar'
-admin.disable-gravatar_help: 'Wyłącz używanie Gravatar jako dostawcy awatarów.'
 
 admin.users.delete_confirm: 'Czy chcesz usunąć tego użytkownika?'
 

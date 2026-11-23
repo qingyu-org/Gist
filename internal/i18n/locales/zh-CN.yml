@@ -228,8 +228,6 @@ admin.require-login: 登录访问限制
 admin.require-login_help: 强制用户登录后才能查看 Gist。
 admin.disable-login: 禁用登录表单
 admin.disable-login_help: 禁止使用登录表单进行登录以强制通过 OAuth 提供方登录。
-admin.disable-gravatar: 禁用 Gravatar
-admin.disable-gravatar_help: 停止使用 Gravatar 作为头像提供方。
 admin.api-enabled: 启用 REST API（/api）
 admin.api-enabled_help: 允许通过 Personal Access Token 程序化访问 Gist 和用户信息。
 admin.allow-gists-without-login: 允许未登录状态下访问单个 Gist
@@ -509,8 +507,6 @@ settings.auth.allow_gists_without_login: 允许匿名创建 Gist
 settings.auth.allow_gists_without_login_help: 开启强制登录后，仍允许访客创建 Gist。
 settings.auth.disable_login_form: 禁用密码登录
 settings.auth.disable_login_form_help: 仅保留第三方登录入口。
-settings.auth.disable_gravatar: 禁用 Gravatar
-settings.auth.disable_gravatar_help: 始终使用生成的头像，不请求 Gravatar。
 settings.auth.avatar_provider: 头像服务
 settings.auth.avatar_provider_help: 按账号邮箱的 MD5 值查询头像。WeAvatar 在国内访问更快，Gravatar 是国际通用服务。
 settings.auth.avatar_weavatar: WeAvatar
@@ -596,7 +592,6 @@ settings.oauth.oauth2_name_field: 名称字段
 settings.oauth.oauth2_name_field_help: 用户 JSON 中表示昵称或用户名的字段。
 settings.oauth.oauth2_email_field: 邮箱字段
 settings.oauth.oauth2_email_field_help: 用户 JSON 中表示邮箱的字段。
-settings.oauth.oauth2_avatar_field_help: 用户 JSON 中表示头像地址的字段。
 settings.ldap.url: 服务器地址
 settings.ldap.url_help: 例如 ldap://localhost:389 或 ldaps://ldap.example.com:636，留空则关闭 LDAP 登录。
 settings.ldap.bind_dn: 绑定 DN
@@ -752,13 +747,9 @@ flash.auth.oauth-session-expired: OAuth2 会话已过期，请重试
 flash.gist.archived: Gist 已归档
 flash.gist.unarchived: Gist 已取消归档
 flash.gist.updated: Gist 已更新
-flash.user.avatar-deleted: 头像已移除
 flash.user.style-updated: 外观设置已更新
 flash.auth.totp-invalid: 身份验证密钥无效
 flash.auth.totp-enabled: 双重验证已启用
-flash.user.avatar-invalid: 图片格式无效，仅支持 PNG、JPEG、GIF 和 WebP
-flash.user.avatar-too-large: 图片文件过大，最大为 5 MB
-flash.user.avatar-updated: 头像已更新
 gist.embed.view-all-files: 查看所有文件
 gist.file-binary-edit: 此文件为二进制文件。
 gist.file-raw: 此文件无法预览。
@@ -802,12 +793,9 @@ header.menu.recently-liked: 最近被喜欢
 header.menu.topics: 主题
 header.menu.users: 用户
 settings.avatar: 头像
-settings.avatar-help: 上传自定义头像以替代 Gravatar
 settings.avatar-provider-help: 头像由 %s 按邮箱地址匹配。在下方设置邮箱即可显示头像，更换图片请到对应网站。
 settings.avatar-provider-link: 前往 %s 管理头像
 settings.avatar-generated-help: 本站使用自动生成的头像。管理员可在后台切换头像服务。
-settings.avatar-remove: 移除头像
-settings.avatar-remove-confirm: 确定要移除头像吗？如果绑定了第三方账号，将重新使用它们提供头像。
 settings.header.authentication: 登录与认证
 settings.style.added-lines-color: 新增行颜色
 settings.style.default-order: 默认排序方向

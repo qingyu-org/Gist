@@ -203,8 +203,6 @@ admin.require-login: Giriş gerektir
 admin.require-login_help: Gistleri görebilmek için kullanıcıların oturum açmasını zorunlu kılar.
 admin.disable-login: Giriş formunu devre dışı bırak
 admin.disable-login_help: Giriş formunu kullanarak giriş yapmayı yasaklar ve bunun yerine OAuth sağlayıcılarının kullanılmasını zorunlu hale getirir.
-admin.disable-gravatar: Gravatar'ı devre dışı bırak
-admin.disable-gravatar_help: Gravatar'ın avatar sağlayıcı olarak kullanımını devre dışı bırakır.
 admin.allow-gists-without-login: Bireysel gistlere oturum açmadan izin ver
 admin.allow-gists-without-login_help: Bireysel gistlerin oturum açmadan görüntülenmesine ve indirilmesine izin verir, ancak gistleri keşfetmek için oturum açmayı zorunlu kılar.
 admin.users.delete_confirm: Bu kullanıcıyı silmek istiyor musun?

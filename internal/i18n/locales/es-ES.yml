@@ -161,8 +161,6 @@ admin.require-login: Requerir inicio de sesión
 admin.require-login_help: Obligar a los usuarios a iniciar sesión para ver gists.
 admin.disable-login: Deshabilitar formulario de inicio de sesión
 admin.disable-login_help: Prohibir el inicio de sesión a través del formulario de inicio de sesión para forzar el uso de proveedores de OAuth en su lugar.
-admin.disable-gravatar: Deshabilitar Gravatar
-admin.disable-gravatar_help: Deshabilitar el uso de Gravatar como proveedor de avatar.
 admin.allow-gists-without-login: Permitir gists individuales sin iniciar sesión
 admin.allow-gists-without-login_help: Permitir ver y descargar gists individuales sin iniciar sesión, requiriendo iniciar sesión para descubrir gists.
 admin.users.delete_confirm: ¿Quieres eliminar a este usuario?

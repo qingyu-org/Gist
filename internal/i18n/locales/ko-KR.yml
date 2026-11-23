@@ -143,8 +143,6 @@ gist.revision-of: "%s의 리비전"
 
 settings: 설정
 settings.avatar: 아바타
-settings.avatar-help: Gravatar 대신 사용할 사용자 지정 아바타를 업로드하세요
-settings.avatar-remove: 아바타 제거
 settings.email: 이메일
 settings.email-help: 커밋 및 Gravatar에 사용됩니다
 settings.email-set: 이메일 설정
@@ -340,8 +338,6 @@ admin.allow-gists-without-login: 로그인 없이 개별 gist 허용
 admin.allow-gists-without-login_help: gist 목록 탐색에는 로그인을 요구하면서도, 개별 gist는 로그인 없이 보고 다운로드할 수 있도록 허용합니다.
 admin.disable-login: 로그인 양식 비활성화
 admin.disable-login_help: 로그인 양식을 통한 로그인을 금지하여 OAuth 제공자를 사용하도록 강제합니다.
-admin.disable-gravatar: Gravatar 비활성화
-admin.disable-gravatar_help: 아바타 제공자로 Gravatar 사용을 비활성화합니다.
 admin.api-enabled: /api에서 REST API 활성화
 admin.api-enabled_help: 개인 액세스 토큰을 통해 gist와 사용자 정보에 프로그래밍 방식으로 접근할 수 있도록 허용합니다.
 
@@ -387,10 +383,6 @@ flash.gist.fork-own-gist: 자신의 gist는 포크할 수 없습니다
 flash.gist.forked: Gist가 포크되었습니다
 
 flash.user.email-updated: 이메일이 업데이트되었습니다
-flash.user.avatar-updated: 아바타가 업데이트되었습니다
-flash.user.avatar-deleted: 아바타가 삭제되었습니다
-flash.user.avatar-invalid: "잘못된 이미지 파일입니다. PNG, JPEG, GIF, WebP 형식만 허용됩니다"
-flash.user.avatar-too-large: "이미지 파일이 너무 큽니다. 최대 크기는 5MB입니다"
 flash.user.invalid-ssh-key: 잘못된 SSH 키입니다
 flash.user.ssh-key-added: SSH 키가 추가되었습니다
 flash.user.ssh-key-deleted: SSH 키가 삭제되었습니다

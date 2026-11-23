@@ -206,8 +206,6 @@ admin.allow-gists-without-login: Дозволити перегляд індив�
 admin.allow-gists-without-login_help: Дозволити перегляд і скачування індивідуальних gists без авторизації, але вимагати авторизацію для перегляду переліку gists.
 admin.disable-login: Вимкнути форму авторизації
 admin.disable-login_help: Заборонити авторизацію по паролю та замість цього примушувати використовувати провайдерів OAuth.
-admin.disable-gravatar: Заборонити Gravatar
-admin.disable-gravatar_help: Вимкнути використання Gravatar як провайдера аватарів.
 
 admin.users.delete_confirm: Ви впевнені, що хочете видалити цього користувача?
 

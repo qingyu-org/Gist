@@ -199,12 +199,9 @@ gist.revision-of: Revision of %s
 
 settings: Settings
 settings.avatar: Avatar
-settings.avatar-help: Upload a custom avatar to override Gravatar
 settings.avatar-provider-help: Your picture is matched to your email address by %s. Set the address below to pick it up; change the picture itself on the provider's site.
 settings.avatar-provider-link: Manage your picture on %s
 settings.avatar-generated-help: This instance draws generated avatars. An administrator can switch to an avatar provider in the admin settings.
-settings.avatar-remove: Remove avatar
-settings.avatar-remove-confirm: Remove your profile picture? Your provider avatar will be used again if there is one.
 settings.email: Email
 settings.email-help: Used for commits and your avatar
 settings.email-set: Set email
@@ -464,8 +461,6 @@ admin.allow-gists-without-login: Allow individual gists without login
 admin.allow-gists-without-login_help: Allow individual gists to be viewed and downloaded without login, while requiring login for discovering gists.
 admin.disable-login: Disable login form
 admin.disable-login_help: Forbid logging in via the login form to force using OAuth providers instead.
-admin.disable-gravatar: Disable Gravatar
-admin.disable-gravatar_help: Disable the usage of Gravatar as an avatar provider.
 admin.api-enabled: Enable REST API at /api
 admin.api-enabled_help: Allow programmatic access to gists and user info via Personal Access Tokens.
 
@@ -524,13 +519,9 @@ flash.gist.forked: Gist has been forked
 flash.gist.comment-deleted: Comment has been deleted
 
 flash.user.email-updated: Email updated
-flash.user.avatar-updated: Avatar updated
-flash.user.avatar-deleted: Avatar removed
 flash.user.style-updated: Appearance updated
 flash.auth.totp-invalid: Invalid authentication secret
 flash.auth.totp-enabled: Two-factor authentication enabled
-flash.user.avatar-invalid: Invalid image file, allowed formats are PNG, JPEG, GIF and WebP
-flash.user.avatar-too-large: Image file is too large, the maximum size is 5 MB
 flash.user.invalid-ssh-key: Invalid SSH key
 flash.user.ssh-key-added: SSH key added
 flash.user.ssh-key-deleted: SSH key deleted
@@ -638,8 +629,6 @@ settings.auth.allow_gists_without_login: Allow anonymous gists
 settings.auth.allow_gists_without_login_help: Let visitors create gists without an account when login is required.
 settings.auth.disable_login_form: Disable sign-in form
 settings.auth.disable_login_form_help: Only third-party sign-in is offered.
-settings.auth.disable_gravatar: Disable Gravatar
-settings.auth.disable_gravatar_help: Always use generated avatars instead of Gravatar.
 settings.auth.avatar_provider: Avatar provider
 settings.auth.avatar_provider_help: Pictures are looked up by the MD5 hash of each account's email address. WeAvatar is faster in mainland China; Gravatar is the international default.
 settings.auth.avatar_weavatar: WeAvatar
@@ -725,7 +714,6 @@ settings.oauth.oauth2_name_field: Name field
 settings.oauth.oauth2_name_field_help: JSON field holding the display name or login name.
 settings.oauth.oauth2_email_field: Email field
 settings.oauth.oauth2_email_field_help: JSON field holding the email address.
-settings.oauth.oauth2_avatar_field_help: JSON field holding the avatar URL.
 settings.ldap.url: Server URL
 settings.ldap.url_help: For example ldap://localhost:389 or ldaps://ldap.example.com:636. Leave empty to disable LDAP sign-in.
 settings.ldap.bind_dn: Bind DN

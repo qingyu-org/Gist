@@ -256,8 +256,6 @@ admin.allow-gists-without-login: ''
 admin.allow-gists-without-login_help: ''
 admin.disable-login: ''
 admin.disable-login_help: ''
-admin.disable-gravatar: ''
-admin.disable-gravatar_help: ''
 
 admin.users.delete_confirm: ''
 
