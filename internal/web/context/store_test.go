@@ -4,8 +4,8 @@ import (
 	"io"
 	"testing"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
 	"github.com/gorilla/sessions"
+	"github.com/qingyu-org/Gist/internal/config"
 	"github.com/stretchr/testify/require"
 )
 

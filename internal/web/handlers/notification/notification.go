@@ -6,10 +6,10 @@ import (
 	"html/template"
 	"strconv"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/render"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/render"
+	"github.com/qingyu-org/Gist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/web/handlers"
 )
 
 const perPage = 30

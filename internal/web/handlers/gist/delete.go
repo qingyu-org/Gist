@@ -1,8 +1,8 @@
 package gist
 
 import (
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 func DeleteGist(ctx *context.Context) error {

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
+	"github.com/qingyu-org/Gist/internal/db"
 	"github.com/stretchr/testify/require"
 )
 

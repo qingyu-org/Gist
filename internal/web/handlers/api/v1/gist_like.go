@@ -3,8 +3,8 @@ package v1
 import (
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 // ListLikedGists handles GET /api/gists/liked.

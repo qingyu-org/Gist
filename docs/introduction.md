@@ -4,7 +4,7 @@ description: QingyuGist is a self-hosted pastebin powered by Git. Snippets are s
 
 # QingyuGist
 
-<img height="108px" src="https://raw.githubusercontent.com/LiuShen-Fork/QingyuGist/master/public/img/qingyugist.svg" alt="QingyuGist" align="right" />
+<img height="108px" src="https://raw.githubusercontent.com/qingyu-org/Gist/master/public/img/qingyugist.svg" alt="QingyuGist" align="right" />
 
 QingyuGist is a **self-hosted** pastebin **powered by Git**. All snippets are stored in a Git repository and can be
 read and/or modified using standard Git commands, or with the web interface. 

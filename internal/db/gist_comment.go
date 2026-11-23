@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
+	"github.com/qingyu-org/Gist/internal/config"
 )
 
 // GistComment is a Markdown comment left on a gist. Comments are stored in the

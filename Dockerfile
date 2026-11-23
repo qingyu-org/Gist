@@ -2,8 +2,8 @@
 # references in COPY --from resolve to the *target* platform, so an arm64 build
 # would otherwise copy arm64 node/go binaries into an amd64 stage and try to run
 # them under QEMU (failing with "Could not open '/lib/ld-musl-aarch64.so.1'").
-FROM --platform=$BUILDPLATFORM golang:1.27.2-alpine3.24 AS golang
-FROM --platform=$BUILDPLATFORM node:26.5.0-alpine3.24 AS node
+FROM --platform=$BUILDPLATFORM golang:1.27.4-alpine3.24 AS golang
+FROM --platform=$BUILDPLATFORM node:26.13.1-alpine3.24 AS node
 
 FROM --platform=$BUILDPLATFORM alpine:3.24 AS base
 
@@ -61,7 +61,7 @@ FROM alpine:3.24 AS prod
 ARG VERSION=dev
 LABEL org.opencontainers.image.title="QingyuGist" \
       org.opencontainers.image.description="A self-hosted pastebin powered by Git" \
-      org.opencontainers.image.source="https://github.com/LiuShen-Fork/QingyuGist" \
+      org.opencontainers.image.source="https://github.com/qingyu-org/Gist" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.licenses="AGPL-3.0"
 

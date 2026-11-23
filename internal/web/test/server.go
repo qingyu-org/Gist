@@ -12,16 +12,16 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/index"
-	"github.com/LiuShen-Fork/QingyuGist/internal/settings"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/metrics"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/server"
 	"github.com/gorilla/schema"
 	"github.com/labstack/echo/v4"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/index"
+	"github.com/qingyu-org/Gist/internal/settings"
+	"github.com/qingyu-org/Gist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/web/handlers/metrics"
+	"github.com/qingyu-org/Gist/internal/web/server"
 	"github.com/stretchr/testify/require"
 )
 
@@ -303,18 +303,26 @@ func Setup(t *testing.T) *Server {
 	s := &Server{
 		server: server.NewServer(true),
 	}
-
-	s.server.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			err := next(c)
-			if data, ok := c.Request().Context().Value(context.DataKeyStr).(echo.Map); ok {
-				s.setContextData(data)
-			}
-			return err
-		}
-	})
+	s.server.Use(s.captureContextData)
 
 	return s
+}
+
+// Restart recreates the server, as restarting QingyuGist does. Templates added to
+// $QYG_HOME/custom after Setup are only parsed then.
+func (s *Server) Restart() {
+	s.server = server.NewServer(true)
+	s.server.Use(s.captureContextData)
+}
+
+func (s *Server) captureContextData(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		err := next(c)
+		if data, ok := c.Request().Context().Value(context.DataKeyStr).(echo.Map); ok {
+			s.setContextData(data)
+		}
+		return err
+	}
 }
 
 func Teardown(t *testing.T) {

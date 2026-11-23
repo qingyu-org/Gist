@@ -5,12 +5,12 @@ import (
 	"errors"
 	"slices"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/openidConnect"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/web/context"
 	"github.com/rs/zerolog/log"
 )
 

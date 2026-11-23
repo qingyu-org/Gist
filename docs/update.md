@@ -28,23 +28,22 @@ cp -r ~/.qingyugist ~/.qingyugist.bak
 
 Pull the last version of QingyuGist
 ```shell
-docker pull ghcr.io/liushen-fork/qingyugist:latest
+docker pull ghcr.io/qingyu-org/qingyugist:latest
 ```
 
 And restart the container, using `docker compose up -d` for example if you use docker compose.
 
 ### Via binary
 
-Stop the running instance; then like your first installation of QingyuGist, download the archive for your system from the release page [here](https://github.com/LiuShen-Fork/QingyuGist/releases/latest), and extract it.
+Stop the running instance; then like your first installation of QingyuGist, download the archive for your system from the release page [here](https://github.com/qingyu-org/Gist/releases/latest), and extract it.
 
 ```shell
 # example for linux amd64
-wget https://github.com/LiuShen-Fork/QingyuGist/releases/download/v1.15.3/qingyugist1.15.3-linux-amd64.tar.gz
+wget https://github.com/qingyu-org/Gist/releases/download/v1.3.0/qingyugist-1.3.0-linux-amd64.tar.gz
 
-tar xzvf qingyugist1.15.3-linux-amd64.tar.gz
-cd qingyugist
+tar xzvf qingyugist-1.3.0-linux-amd64.tar.gz
 chmod +x qingyugist
-./qingyugist
+./qingyugist # with or without a config file
 ```
 
 ### From source

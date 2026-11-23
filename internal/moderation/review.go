@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/settings"
+	"github.com/qingyu-org/Gist/internal/settings"
 )
 
 // verdictSchema is sent as a strict JSON schema so the provider cannot answer

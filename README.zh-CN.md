@@ -10,14 +10,14 @@
 <p>
 <a href="README.md">English</a> ·
 <a href="docs/">文档</a> ·
-<a href="https://github.com/LiuShen-Fork/QingyuGist/releases/latest">版本发布</a>
+<a href="https://github.com/qingyu-org/Gist/releases/latest">版本发布</a>
 </p>
 
 <p>
-<img alt="CI" src="https://github.com/LiuShen-Fork/QingyuGist/actions/workflows/ci.yml/badge.svg?branch=master">
-<img alt="Release" src="https://img.shields.io/github/v/release/LiuShen-Fork/QingyuGist?color=teal">
-<img alt="License" src="https://img.shields.io/github/license/LiuShen-Fork/QingyuGist?color=blue">
-<img alt="Go" src="https://img.shields.io/github/go-mod/go-version/LiuShen-Fork/QingyuGist">
+<img alt="CI" src="https://github.com/qingyu-org/Gist/actions/workflows/ci.yml/badge.svg?branch=master">
+<img alt="Release" src="https://img.shields.io/github/v/release/qingyu-org/Gist?color=teal">
+<img alt="License" src="https://img.shields.io/github/license/qingyu-org/Gist?color=blue">
+<img alt="Go" src="https://img.shields.io/github/go-mod/go-version/qingyu-org/Gist">
 </p>
 
 <a href="docs/public/qingyugist-demo-zh.png"><img src="docs/public/qingyugist-demo-zh.png" width="900" alt="带 Markdown 预览的 Gist 页面"></a>
@@ -60,13 +60,13 @@ GitHub Gist 很好用，但它住在 GitHub 上。清羽 Gist 是同一个想法
 每次发布都会推送到 GitHub Container Registry：
 
 ```shell
-docker pull ghcr.io/liushen-fork/qingyugist:latest
+docker pull ghcr.io/qingyu-org/qingyugist:latest
 ```
 
 ```yaml
 services:
   qingyugist:
-    image: ghcr.io/liushen-fork/qingyugist:latest
+    image: ghcr.io/qingyu-org/qingyugist:latest
     container_name: qingyugist
     restart: unless-stopped
     ports:
@@ -83,7 +83,7 @@ services:
 
 ### 预编译二进制
 
-在[最新版本](https://github.com/LiuShen-Fork/QingyuGist/releases/latest)下载对应平台的压缩包，解压后：
+在[最新版本](https://github.com/qingyu-org/Gist/releases/latest)下载对应平台的压缩包，解压后：
 
 ```shell
 tar xzf qingyugist-<version>-linux-amd64.tar.gz
@@ -98,8 +98,8 @@ tar xzf qingyugist-<version>-linux-amd64.tar.gz
 需要 Go 1.27+、Node.js 26+、Git 2.28+ 和 Make。
 
 ```shell
-git clone https://github.com/LiuShen-Fork/QingyuGist.git
-cd QingyuGist
+git clone https://github.com/qingyu-org/Gist.git
+cd Gist
 make
 ./qingyugist
 ```
@@ -131,7 +131,7 @@ make
 - 旧的 `/-/...` 书签会跳转，已有的 Git 远端照常工作。浏览器会话因为 Cookie 改名会失效，重新登录即可。
 
 有两处需要手动更新：可执行文件现在叫 `qingyugist`（注意修改 systemd 单元），镜像地址是
-`ghcr.io/liushen-fork/qingyugist`。需要回退时，恢复备份或把数据库改回原来的名字。
+`ghcr.io/qingyu-org/qingyugist`。需要回退时，恢复备份或把数据库改回原来的名字。
 
 ## 开发
 

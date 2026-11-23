@@ -10,11 +10,11 @@ package ipc
 import (
 	"net/http"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/hooks"
-	"github.com/LiuShen-Fork/QingyuGist/internal/ipc"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/hooks"
+	"github.com/qingyu-org/Gist/internal/ipc"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 // PreReceive handles a pre-receive event forwarded by the hook subprocess and

@@ -3,9 +3,11 @@ package auth
 import (
 	"errors"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/auth/ldap"
-	passwordpkg "github.com/LiuShen-Fork/QingyuGist/internal/auth/password"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
+	"github.com/qingyu-org/Gist/internal/auth/ldap"
+	passwordpkg "github.com/qingyu-org/Gist/internal/auth/password"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/validator"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
@@ -81,6 +83,11 @@ func tryDbLogin(user *db.User, password string) (*db.User, error) {
 }
 
 func tryLdapLogin(username, password string) (user *db.User, err error) {
+	// The username is also the name of the user's repositories directory
+	if !git.IsValidDirectoryName(username) {
+		return nil, AuthError{"invalid username"}
+	}
+
 	ok, err := ldap.Authenticate(username, password)
 	if err != nil {
 		log.Error().Err(err).Msg("LDAP authentication failed")
@@ -99,6 +106,13 @@ func tryLdapLogin(username, password string) (user *db.User, err error) {
 	}
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
+		// Directory usernames can contain characters refused on registration, such as "@" or
+		// accents, so only refuse reserved names and what is unsafe in a directory name or a URL
+		if err = validator.NewValidator().Var(username, "required,ldapusername,notreserved"); err != nil {
+			log.Warn().Err(err).Msgf("Cannot create user %q after LDAP authentication: invalid username", username)
+			return nil, AuthError{"invalid username"}
+		}
+
 		user = &db.User{
 			Username: username,
 		}

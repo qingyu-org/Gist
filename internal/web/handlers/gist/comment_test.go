@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/settings"
-	webtest "github.com/LiuShen-Fork/QingyuGist/internal/web/test"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/settings"
+	webtest "github.com/qingyu-org/Gist/internal/web/test"
 	"github.com/stretchr/testify/require"
 )
 

@@ -6,8 +6,8 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 func RawFile(ctx *context.Context) error {
@@ -50,6 +50,12 @@ func DownloadFile(ctx *context.Context) error {
 
 	if file == nil {
 		return ctx.NotFound("File not found")
+	}
+
+	// The detected type can be JavaScript: keep another origin from loading a
+	// private file as a script with the owner's session cookie.
+	if gist.Private == db.PrivateVisibility {
+		ctx.Response().Header().Set("Cross-Origin-Resource-Policy", "same-origin")
 	}
 
 	ctx.Response().Header().Set("Content-Type", file.MimeType.Header())

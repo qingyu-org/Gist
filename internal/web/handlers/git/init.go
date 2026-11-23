@@ -3,9 +3,9 @@ package git
 import (
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
 	"github.com/google/uuid"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/web/context"
 	"github.com/rs/zerolog/log"
 )
 

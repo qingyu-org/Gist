@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	webtest "github.com/LiuShen-Fork/QingyuGist/internal/web/test"
+	webtest "github.com/qingyu-org/Gist/internal/web/test"
 	"github.com/stretchr/testify/require"
 )
 

@@ -3,12 +3,12 @@ package auth
 import (
 	"errors"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/auth"
-	passwordpkg "github.com/LiuShen-Fork/QingyuGist/internal/auth/password"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/i18n"
-	"github.com/LiuShen-Fork/QingyuGist/internal/validator"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/auth"
+	passwordpkg "github.com/qingyu-org/Gist/internal/auth/password"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/i18n"
+	"github.com/qingyu-org/Gist/internal/validator"
+	"github.com/qingyu-org/Gist/internal/web/context"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
@@ -117,6 +117,7 @@ func ProcessRegister(ctx *context.Context) error {
 	}
 
 	sess.Values["user"] = user.ID
+	sess.Values["sessionVersion"] = user.SessionVersion
 	ctx.SaveSession(sess)
 
 	return ctx.RedirectTo("/")
@@ -169,6 +170,7 @@ func ProcessLogin(ctx *context.Context) error {
 	}
 
 	sess.Values["user"] = user.ID
+	sess.Values["sessionVersion"] = user.SessionVersion
 	sess.Options.MaxAge = 60 * 60 * 24 * 365 // 1 year
 	ctx.SaveSession(sess)
 	ctx.DeleteCsrfCookie()

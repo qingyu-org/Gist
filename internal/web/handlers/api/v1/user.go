@@ -4,19 +4,16 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
 	"gorm.io/gorm"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/api/v1/types"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/web/handlers/api/v1/types"
 )
 
 // GetUser handles GET /api/user.
@@ -59,14 +56,8 @@ func UpdateUser(ctx *context.Context) error {
 
 		// Rename the user's repos directory on disk so subsequent git
 		// operations resolve correctly under the new name.
-		sourceDir := filepath.Join(config.GetHomeDir(), git.ReposDirectory, strings.ToLower(user.Username))
-		destinationDir := filepath.Join(config.GetHomeDir(), git.ReposDirectory, strings.ToLower(dto.Username))
-		if sourceDir != destinationDir {
-			if _, err := os.Stat(sourceDir); !os.IsNotExist(err) {
-				if err := os.Rename(sourceDir, destinationDir); err != nil {
-					return ctx.ErrorJson(500, "failed to rename user directory", err)
-				}
-			}
+		if err := git.RenameUserDirectory(user.Username, dto.Username); err != nil {
+			return ctx.ErrorJson(500, "failed to rename user directory", err)
 		}
 		user.Username = dto.Username
 	}

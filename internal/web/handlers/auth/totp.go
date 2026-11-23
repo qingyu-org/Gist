@@ -3,10 +3,10 @@ package auth
 import (
 	"net/url"
 
-	passwordpkg "github.com/LiuShen-Fork/QingyuGist/internal/auth/password"
-	"github.com/LiuShen-Fork/QingyuGist/internal/auth/totp"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	passwordpkg "github.com/qingyu-org/Gist/internal/auth/password"
+	"github.com/qingyu-org/Gist/internal/auth/totp"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 // confirmCurrentPassword gates destructive MFA changes on the account password.
@@ -160,7 +160,13 @@ func AssertTotp(ctx *context.Context) error {
 		redirectUrl = "/settings/authentication"
 	}
 
+	var user *db.User
+	if user, err = db.GetUserById(userId); err != nil {
+		return ctx.ErrorRes(500, "Cannot get user", err)
+	}
+
 	sess.Values["user"] = userId
+	sess.Values["sessionVersion"] = user.SessionVersion
 	sess.Options.MaxAge = 60 * 60 * 24 * 365 // 1 year
 	delete(sess.Values, "mfaID")
 	ctx.SaveSession(sess)

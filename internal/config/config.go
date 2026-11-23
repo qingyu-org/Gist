@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/session"
+	"github.com/qingyu-org/Gist/internal/session"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"

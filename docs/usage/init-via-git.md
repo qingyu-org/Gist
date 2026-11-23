@@ -61,4 +61,8 @@ To http://qingyugist.url/init
  * [new branch]      master -> master
 ```
 
-<video controls="controls" src="https://github.com/LiuShen-Fork/QingyuGist/assets/27960254/3fe1a0ba-b638-4928-83a1-f38e46fea066" />
+::: warning
+If multi-factor authentication (TOTP or a passkey) is enabled on your account, your password is refused over HTTP. Enter an [access token](./access-tokens) with the Gists "Read & Write" permission instead.
+:::
+
+<video controls="controls" src="https://github.com/qingyu-org/Gist/assets/27960254/3fe1a0ba-b638-4928-83a1-f38e46fea066" />

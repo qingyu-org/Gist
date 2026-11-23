@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/ipc"
-	"github.com/LiuShen-Fork/QingyuGist/internal/ssh"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/ipc"
+	"github.com/qingyu-org/Gist/internal/ssh"
+	"github.com/qingyu-org/Gist/internal/web/context"
 	"gorm.io/gorm"
 )
 

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 type ContextAuthInfo struct {

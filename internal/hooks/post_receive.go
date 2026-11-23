@@ -10,12 +10,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/ipc"
-	"github.com/LiuShen-Fork/QingyuGist/internal/moderation"
-	validatorpkg "github.com/LiuShen-Fork/QingyuGist/internal/validator"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/ipc"
+	"github.com/qingyu-org/Gist/internal/moderation"
+	validatorpkg "github.com/qingyu-org/Gist/internal/validator"
 	"github.com/rs/zerolog/log"
 )
 

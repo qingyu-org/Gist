@@ -4,16 +4,17 @@ import (
 	"fmt"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strings"
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/index"
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/lexers"
 	"github.com/dustin/go-humanize"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/index"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
@@ -154,11 +155,28 @@ func (gist *Gist) BeforeDelete(tx *gorm.DB) error {
 	return err
 }
 
+var uuidPrefixRegex = regexp.MustCompile(`^[0-9a-f]+$`)
+
+// GetGist finds a gist by its full UUID or custom URL. Public gists can also be
+// found by a UUID prefix; unlisted and private gists can't, as an unguessable
+// UUID is what keeps them hidden.
 func GetGist(user string, gistUuid string) (*Gist, error) {
 	gist := new(Gist)
+	gistUuid = strings.ToLower(gistUuid)
+
+	// url_normalized is empty when a gist has no custom URL, and must not match
+	// an empty identifier (or a blank one, as MySQL can ignore trailing spaces)
+	query := "gists.uuid = ? OR (gists.url_normalized <> '' AND gists.url_normalized = ?)"
+	args := []interface{}{gistUuid, gistUuid}
+	// Only hex input reaches LIKE, so it can't carry the % or _ wildcards
+	if uuidPrefixRegex.MatchString(gistUuid) {
+		query += " OR (gists.private = 0 AND gists.uuid LIKE ?)"
+		args = append(args, gistUuid+"%")
+	}
+	args = append(args, strings.ToLower(user))
+
 	err := db.Preload("User").Preload("Forked.User").Preload("Topics").
-		Where("(gists.uuid LIKE ? OR gists.url_normalized = ?) AND users.username_normalized = ?",
-			strings.ToLower(gistUuid)+"%", strings.ToLower(gistUuid), strings.ToLower(user)).
+		Where("("+query+") AND users.username_normalized = ?", args...).
 		Joins("join users on gists.user_id = users.id").
 		First(&gist).Error
 
@@ -190,6 +208,7 @@ func GetAllGistsForCurrentUser(currentUserId uint, since *time.Time, offset int,
 	query := db.Preload("User").
 		Preload("Forked.User").
 		Preload("Topics").
+		Scopes(notExpired).
 		Where("gists.private = 0 or gists.user_id = ?", currentUserId)
 	if since != nil {
 		query = query.Where("gists.updated_at >= ?", since.Unix())
@@ -213,6 +232,7 @@ func GetAllGistsForCurrentUserFiltered(currentUserId uint, title string, languag
 	var count int64
 
 	baseQuery := db.Preload("User").Preload("Forked.User").Preload("Topics").
+		Scopes(notExpired).
 		Where("gists.private = 0 or gists.user_id = ?", currentUserId).
 		Model(&Gist{})
 
@@ -257,6 +277,7 @@ func GetAllGistsByTopicFiltered(currentUserId uint, topic string, title string, 
 	var count int64
 
 	baseQuery := db.Preload("User").Preload("Forked.User").Preload("Topics").
+		Scopes(notExpired).
 		Where("((gists.private = 0) or (gists.private > 0 and gists.user_id = ?))", currentUserId).
 		Where("exists (select 1 from gist_topics where gist_topics.gist_id = gists.id and gist_topics.topic = ?)", topic).
 		Model(&Gist{})
@@ -321,6 +342,7 @@ func GetAllGistsOfUser(userID uint, since *time.Time, offset int, sort string, o
 	query := db.Preload("User").
 		Preload("Forked.User").
 		Preload("Topics").
+		Scopes(notExpired).
 		Where("gists.user_id = ?", userID)
 	if since != nil {
 		query = query.Where("gists.updated_at >= ?", since.Unix())
@@ -343,6 +365,7 @@ func GetAllPublicGistsOfUser(userID uint, since *time.Time, offset int, sort str
 	query := db.Preload("User").
 		Preload("Forked.User").
 		Preload("Topics").
+		Scopes(notExpired).
 		Where("gists.private = 0 AND gists.user_id = ?", userID)
 	if since != nil {
 		query = query.Where("gists.updated_at >= ?", since.Unix())
@@ -370,6 +393,7 @@ func GetAllGists(offset int) ([]*Gist, error) {
 func GetAllGistsFromSearch(currentUserId uint, query string, offset int, sort string, order string, topic string) ([]*Gist, error) {
 	var gists []*Gist
 	tx := db.Preload("User").Preload("Forked.User").Preload("Topics").
+		Scopes(notExpired).
 		Where("((gists.private = 0) or (gists.private > 0 and gists.user_id = ?))", currentUserId).
 		Where("gists.title like ? or gists.description like ?", "%"+query+"%", "%"+query+"%")
 
@@ -388,6 +412,7 @@ func GetAllGistsFromSearch(currentUserId uint, query string, offset int, sort st
 
 func gistsFromUserStatement(fromUserId uint, currentUserId uint) *gorm.DB {
 	return db.Preload("User").Preload("Forked.User").Preload("Topics").
+		Scopes(notExpired).
 		Where("((gists.private = 0) or (gists.private > 0 and gists.user_id = ?))", currentUserId).
 		Where("users.id = ?", fromUserId).
 		Joins("join users on gists.user_id = users.id")
@@ -438,6 +463,7 @@ func CountAllGistsFromUser(fromUserId uint, currentUserId uint) (int64, error) {
 
 func likedStatement(fromUserId uint, currentUserId uint) *gorm.DB {
 	return db.Preload("User").Preload("Forked.User").Preload("Topics").
+		Scopes(notExpired).
 		Where("((gists.private = 0) or (gists.private > 0 and gists.user_id = ?))", currentUserId).
 		Where("likes.user_id = ?", fromUserId).
 		Joins("join likes on gists.id = likes.gist_id").
@@ -470,6 +496,7 @@ func CountAllGistsLikedByUser(fromUserId uint, currentUserId uint) (int64, error
 
 func likedAllStatement(currentUserId uint) *gorm.DB {
 	return db.Preload("User").Preload("Forked.User").Preload("Topics").
+		Scopes(notExpired).
 		Where("((gists.private = 0) or (gists.private > 0 and gists.user_id = ?))", currentUserId).
 		Where("exists (select 1 from likes where likes.gist_id = gists.id)")
 }
@@ -490,6 +517,7 @@ func GetAllGistsLiked(currentUserId uint, since *time.Time, offset int, sort str
 
 func forkedStatement(fromUserId uint, currentUserId uint) *gorm.DB {
 	return db.Preload("User").Preload("Forked.User").Preload("Topics").
+		Scopes(notExpired).
 		Where("gists.forked_id is not null and ((gists.private = 0) or (gists.private > 0 and gists.user_id = ?))", currentUserId).
 		Where("gists.user_id = ?", fromUserId).
 		Joins("join users on gists.user_id = users.id")
@@ -524,6 +552,7 @@ func CountAllGistsForkedByUser(fromUserId uint, currentUserId uint) (int64, erro
 // points to via forked_id - rather than the fork copies themselves.
 func forkedAllStatement(currentUserId uint) *gorm.DB {
 	return db.Preload("User").Preload("Forked.User").Preload("Topics").
+		Scopes(notExpired).
 		Where("((gists.private = 0) or (gists.private > 0 and gists.user_id = ?))", currentUserId).
 		Where("exists (select 1 from gists as forks where forks.forked_id = gists.id)")
 }
@@ -558,7 +587,7 @@ func applySince(q *gorm.DB, since *time.Time) *gorm.DB {
 
 func CountAllGistsForCurrentUser(currentUserId uint, since *time.Time) (int64, error) {
 	var count int64
-	q := applySince(db.Model(&Gist{}).Where("gists.private = 0 or gists.user_id = ?", currentUserId), since)
+	q := applySince(db.Model(&Gist{}).Scopes(notExpired).Where("gists.private = 0 or gists.user_id = ?", currentUserId), since)
 	err := q.Count(&count).Error
 	return count, err
 }
@@ -599,14 +628,14 @@ func GetPendingModerationGistIDs() ([]uint, error) {
 
 func CountAllGistsOfUser(userID uint, since *time.Time) (int64, error) {
 	var count int64
-	q := applySince(db.Model(&Gist{}).Where("gists.user_id = ?", userID), since)
+	q := applySince(db.Model(&Gist{}).Scopes(notExpired).Where("gists.user_id = ?", userID), since)
 	err := q.Count(&count).Error
 	return count, err
 }
 
 func CountAllPublicGistsOfUser(userID uint, since *time.Time) (int64, error) {
 	var count int64
-	q := applySince(db.Model(&Gist{}).Where("gists.private = 0 AND gists.user_id = ?", userID), since)
+	q := applySince(db.Model(&Gist{}).Scopes(notExpired).Where("gists.private = 0 AND gists.user_id = ?", userID), since)
 	err := q.Count(&count).Error
 	return count, err
 }
@@ -645,6 +674,7 @@ func GetAllGistsVisibleByUser(userId uint) ([]uint, error) {
 func GetAllGistsByIds(ids []uint) ([]*Gist, error) {
 	var gists []*Gist
 	err := db.Preload("User").Preload("Forked.User").Preload("Topics").
+		Scopes(notExpired).
 		Where("id in ?", ids).
 		Find(&gists).Error
 
@@ -748,6 +778,7 @@ func (gist *Gist) GetUsersLikes(offset int) ([]*User, error) {
 func (gist *Gist) GetForks(currentUserId uint, offset int, limit int, perPage int) ([]*Gist, error) {
 	var gists []*Gist
 	err := db.Model(&gist).Preload("User").
+		Scopes(notExpired).
 		Where("forked_id = ?", gist.ID).
 		Where("(gists.private = 0) or (gists.private > 0 and gists.user_id = ?)", currentUserId).
 		Limit(limit).
@@ -763,6 +794,7 @@ func (gist *Gist) GetForks(currentUserId uint, offset int, limit int, perPage in
 func (gist *Gist) CountForks(currentUserId uint) (int64, error) {
 	var count int64
 	err := db.Model(&Gist{}).
+		Scopes(notExpired).
 		Where("forked_id = ?", gist.ID).
 		Where("(gists.private = 0) or (gists.private > 0 and gists.user_id = ?)", currentUserId).
 		Count(&count).Error

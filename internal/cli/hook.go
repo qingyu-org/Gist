@@ -3,7 +3,7 @@ package cli
 import (
 	"os"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/hooks"
+	"github.com/qingyu-org/Gist/internal/hooks"
 	"github.com/urfave/cli/v2"
 )
 

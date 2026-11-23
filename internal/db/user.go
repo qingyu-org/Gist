@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/git"
 	"gorm.io/gorm"
 )
 
@@ -20,6 +20,7 @@ type User struct {
 	Username           string `gorm:"size:191;uniqueIndex"`
 	UsernameNormalized string `gorm:"size:191;uniqueIndex"`
 	Password           string
+	SessionVersion     uint // incremented when the user's credentials change, to log out the web sessions opened before
 	IsAdmin            bool
 	CreatedAt          int64
 	Email              string `gorm:"size:191;index"`
@@ -203,6 +204,7 @@ func GetUsersWithGistCounts(currentUserId uint, query string, offset int, limit 
 	if err := db.Model(&Gist{}).
 		Select("user_id, count(*) as count").
 		Where("user_id IN ?", ids).
+		Scopes(notExpired).
 		Where("private = 0 or user_id = ?", currentUserId).
 		Group("user_id").
 		Find(&rows).Error; err != nil {

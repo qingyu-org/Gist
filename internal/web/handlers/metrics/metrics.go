@@ -1,9 +1,9 @@
 package metrics
 
 import (
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/qingyu-org/Gist/internal/db"
 )
 
 var (

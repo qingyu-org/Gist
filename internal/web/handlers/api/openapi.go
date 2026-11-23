@@ -3,7 +3,7 @@ package api
 import (
 	_ "embed"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 //go:embed openapi.yaml

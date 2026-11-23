@@ -3,7 +3,7 @@ package render
 import (
 	"html/template"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
+	"github.com/qingyu-org/Gist/internal/db"
 	"github.com/rs/zerolog/log"
 )
 

@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/i18n"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/test"
+	"github.com/qingyu-org/Gist/internal/i18n"
+	"github.com/qingyu-org/Gist/internal/web/test"
 	"github.com/stretchr/testify/require"
 )
 

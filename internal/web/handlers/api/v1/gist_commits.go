@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/api/v1/types"
+	"github.com/qingyu-org/Gist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/web/handlers/api/v1/types"
 )
 
 // ListCommits handles GET /api/gists/:uuid/commits.

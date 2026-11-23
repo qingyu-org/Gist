@@ -3,12 +3,13 @@ package gist_test
 import (
 	"encoding/json"
 	"io"
+	"net/http"
 	"net/url"
 	"strings"
 	"testing"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	webtest "github.com/LiuShen-Fork/QingyuGist/internal/web/test"
+	"github.com/qingyu-org/Gist/internal/db"
+	webtest "github.com/qingyu-org/Gist/internal/web/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -97,6 +98,76 @@ func TestGistIndex(t *testing.T) {
 
 		s.Request(t, "GET", "/"+username+"/"+identifier+"/rev/HEAD", nil, 200)
 		s.Request(t, "GET", "/"+username+"/"+identifier+"/rev/"+commits[1].Hash, nil, 200)
+	})
+}
+
+func TestGistIdentifierLookup(t *testing.T) {
+	s := webtest.Setup(t)
+	defer webtest.Teardown(t)
+
+	s.Register(t, "thomas")
+
+	// Created first so it's the gist a wildcard or an empty identifier would
+	// resolve to
+	_, unlisted, username, identifier := s.CreateGist(t, "1")
+	_, private, _, _ := s.CreateGist(t, "2")
+	_, public, _, _ := s.CreateGist(t, "0")
+
+	t.Run("UnlistedNeedsFullUuid", func(t *testing.T) {
+		s.Request(t, "GET", "/"+username+"/"+identifier, nil, 200)
+		s.Request(t, "GET", "/"+username+"/"+unlisted.Uuid[:8], nil, 404)
+		s.Request(t, "GET", "/"+username+"/"+unlisted.Uuid[:31], nil, 404)
+	})
+
+	t.Run("WildcardsDoNotMatch", func(t *testing.T) {
+		for _, name := range []string{"_", "%25", "%25" + unlisted.Uuid[10:16], unlisted.Uuid[:4] + "%25", "________________________________"} {
+			s.Request(t, "GET", "/"+username+"/"+name, nil, 404)
+			s.Request(t, "GET", "/"+username+"/"+name+"/raw/HEAD/file.txt", nil, 404)
+			s.Request(t, "GET", "/"+username+"/"+name+".js", nil, 404)
+			s.Request(t, "GET", "/"+username+"/"+name+".json", nil, 404)
+		}
+	})
+
+	t.Run("EmptyIdentifier", func(t *testing.T) {
+		// Nothing is left once the extension is stripped
+		for _, name := range []string{".js", ".json", ".git"} {
+			s.Request(t, "GET", "/"+username+"/"+name, nil, 404)
+			s.Request(t, "GET", "/"+username+"/"+name+"/raw/HEAD/file.txt", nil, 404)
+			s.Request(t, "GET", "/"+username+"/"+name+"/archive/HEAD", nil, 404)
+		}
+		s.Request(t, "GET", "/"+username+"//raw/HEAD/file.txt", nil, 404)
+		s.Request(t, "GET", "/"+username+"/%20", nil, 404)
+	})
+
+	t.Run("PrivateNeedsFullUuid", func(t *testing.T) {
+		s.Login(t, "thomas")
+		defer s.Logout()
+
+		s.Request(t, "GET", "/"+username+"/"+private.Uuid, nil, 200)
+		s.Request(t, "GET", "/"+username+"/"+private.Uuid[:8], nil, 404)
+	})
+
+	t.Run("PublicPrefix", func(t *testing.T) {
+		s.Request(t, "GET", "/"+username+"/"+public.Uuid[:8], nil, 200)
+		s.Request(t, "GET", "/"+username+"/"+strings.ToUpper(public.Uuid[:8]), nil, 200)
+		s.Request(t, "GET", "/"+username+"/"+public.Uuid[:8]+"/raw/HEAD/file.txt", nil, 200)
+	})
+
+	t.Run("CustomURL", func(t *testing.T) {
+		s.Login(t, "thomas")
+		s.Request(t, "POST", "/", url.Values{
+			"title":   {"Test"},
+			"name":    {"file.txt"},
+			"content": {"hello world"},
+			"url":     {"my-gist"},
+			"private": {"1"},
+		}, 302)
+		s.Logout()
+
+		s.Request(t, "GET", "/"+username+"/my-gist", nil, 200)
+		s.Request(t, "GET", "/"+username+"/my-gist.js", nil, 200)
+		s.Request(t, "GET", "/"+username+"/my-gist.json", nil, 200)
+		s.Request(t, "GET", "/"+username+"/my-gist/raw/HEAD/file.txt", nil, 200)
 	})
 }
 
@@ -545,5 +616,78 @@ func TestGistJsonSingleFile(t *testing.T) {
 		files, ok := result["files"].([]interface{})
 		require.True(t, ok)
 		require.Len(t, files, 1)
+	})
+}
+
+func TestPrivateGistEmbedSameOrigin(t *testing.T) {
+	s := webtest.Setup(t)
+	defer webtest.Teardown(t)
+
+	s.Register(t, "thomas")
+
+	_, _, username, publicId := s.CreateGist(t, "0")
+	_, _, _, unlistedId := s.CreateGist(t, "1")
+	_, _, _, privateId := s.CreateGist(t, "2")
+
+	get := func(t *testing.T, uri string, expectedCode int, headers map[string]string) (*http.Response, string) {
+		resp := s.RequestWithHeaders(t, "GET", uri, nil, expectedCode, headers)
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+		return resp, string(body)
+	}
+
+	for _, ext := range []string{".js", ".json"} {
+		t.Run("Private"+ext, func(t *testing.T) {
+			uri := "/" + username + "/" + privateId + ext
+			s.Login(t, "thomas")
+			defer s.Logout()
+
+			// Loaded by a page on another origin, with the owner's session cookie
+			for _, site := range []string{"same-site", "cross-site"} {
+				_, body := get(t, uri, 404, map[string]string{"Sec-Fetch-Site": site})
+				require.NotContains(t, body, "hello world")
+			}
+
+			// Same origin, typed in the address bar, or no fetch metadata
+			for _, site := range []string{"same-origin", "none", ""} {
+				resp, body := get(t, uri, 200, map[string]string{"Sec-Fetch-Site": site})
+				require.Equal(t, "same-origin", resp.Header.Get("Cross-Origin-Resource-Policy"))
+				require.Contains(t, body, "hello world")
+			}
+
+			// Opened from a link on another site
+			get(t, uri, 200, map[string]string{
+				"Sec-Fetch-Site": "cross-site",
+				"Sec-Fetch-Mode": "navigate",
+				"Sec-Fetch-Dest": "document",
+			})
+
+			// Owner's access token, which the browser never sends on its own
+			token := s.CreateAccessToken(t, "token"+ext, db.ReadPermission, db.NoPermission)
+			s.Logout()
+			resp, body := get(t, uri, 200, map[string]string{
+				"Sec-Fetch-Site": "cross-site",
+				"Authorization":  "Token " + token,
+			})
+			require.Equal(t, "same-origin", resp.Header.Get("Cross-Origin-Resource-Policy"))
+			require.Contains(t, body, "hello world")
+		})
+	}
+
+	t.Run("PublicAndUnlisted", func(t *testing.T) {
+		for _, logged := range []bool{true, false} {
+			if logged {
+				s.Login(t, "thomas")
+			} else {
+				s.Logout()
+			}
+			for _, id := range []string{publicId, unlistedId} {
+				for _, site := range []string{"same-site", "cross-site"} {
+					resp, body := get(t, "/"+username+"/"+id+".js", 200, map[string]string{"Sec-Fetch-Site": site})
+					require.Empty(t, resp.Header.Get("Cross-Origin-Resource-Policy"))
+					require.Contains(t, body, "hello world")
+				}
+			}
+		}
 	})
 }

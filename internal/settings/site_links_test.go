@@ -85,7 +85,7 @@ func TestParseSiteLinks(t *testing.T) {
 }
 
 func TestValidateSiteSettings(t *testing.T) {
-	if err := Validate(KeySiteRepository, "https://github.com/LiuShen-Fork/QingyuGist"); err != nil {
+	if err := Validate(KeySiteRepository, "https://github.com/qingyu-org/Gist"); err != nil {
 		t.Errorf("valid repository URL rejected: %v", err)
 	}
 	if err := Validate(KeySiteRepository, ""); err != nil {

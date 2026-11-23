@@ -23,8 +23,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
 	"github.com/rs/zerolog/log"
 )
 
@@ -173,7 +173,7 @@ const (
 
 // DefaultRepositoryURL is the project this instance is built from. It is shown
 // as a source-code icon in the public sidebar and can be changed per instance.
-const DefaultRepositoryURL = "https://github.com/LiuShen-Fork/QingyuGist"
+const DefaultRepositoryURL = "https://github.com/qingyu-org/Gist"
 
 // DefaultGitLabURL is used when neither the setting nor the environment names
 // a GitLab instance; without it the provider would build relative endpoints.

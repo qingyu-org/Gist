@@ -15,18 +15,18 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/auth"
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/i18n"
-	"github.com/LiuShen-Fork/QingyuGist/internal/ipc"
-	"github.com/LiuShen-Fork/QingyuGist/internal/render"
-	"github.com/LiuShen-Fork/QingyuGist/internal/settings"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers"
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/qingyu-org/Gist/internal/auth"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/i18n"
+	"github.com/qingyu-org/Gist/internal/ipc"
+	"github.com/qingyu-org/Gist/internal/render"
+	"github.com/qingyu-org/Gist/internal/settings"
+	"github.com/qingyu-org/Gist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/web/handlers"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -384,7 +384,11 @@ func sessionInit(next Handler) Handler {
 			var err error
 			var user *db.User
 
-			if user, err = db.GetUserById(sess.Values["user"].(uint)); err != nil {
+			// log out the session if its user no longer exists, or if it was opened
+			// before the user's credentials changed (older sessions without a
+			// version count as version 0)
+			sessionVersion, _ := sess.Values["sessionVersion"].(uint)
+			if user, err = db.GetUserById(sess.Values["user"].(uint)); err != nil || user.SessionVersion != sessionVersion {
 				sess.Values["user"] = nil
 				ctx.SaveSession(sess)
 				ctx.User = nil
@@ -650,7 +654,9 @@ func gistInit(next Handler) Handler {
 }
 
 // gistSoftInit try to load a gist (same as gistInit) but does not return a 404 if the gist is not found
-// useful for git clients using HTTP to obfuscate the existence of a private gist
+// useful for git clients using HTTP to obfuscate the existence of a private gist.
+// Access to the gist is checked later by the Git handler, so the gist is stored in the echo context
+// instead of the template data, where an error page rendered for this request would display it.
 func gistSoftInit(next Handler) Handler {
 	return func(ctx *context.Context) error {
 		userName := ctx.Param("user")
@@ -659,7 +665,7 @@ func gistSoftInit(next Handler) Handler {
 		gistName = strings.TrimSuffix(gistName, ".git")
 
 		gist, _ := db.GetGist(userName, gistName)
-		ctx.SetData("gist", gist)
+		ctx.Set("gist", gist)
 
 		return next(ctx)
 	}
@@ -668,7 +674,7 @@ func gistSoftInit(next Handler) Handler {
 // gistNewPushSoftInit has the same behavior as gistSoftInit but create a new gist empty instead
 func gistNewPushSoftInit(next Handler) Handler {
 	return func(ctx *context.Context) error {
-		ctx.SetData("gist", new(db.Gist))
+		ctx.Set("gist", new(db.Gist))
 		return next(ctx)
 	}
 }

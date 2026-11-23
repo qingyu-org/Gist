@@ -377,7 +377,8 @@ auth.mfa.passkey-added-at: 密钥已添加
 auth.mfa.passkey-never-used: 从未使用过
 auth.mfa.passkey-last-used: 最后使用于
 auth.mfa.delete-passkey-confirm: 确认删除密钥
-error.not-in-mfa-session: 用户不在 MFA 会话中
+error.not-in-mfa-session:
+error.git-mfa-use-token: 该账号已启用多因素认证，通过 HTTP 操作 Git 时请使用访问令牌，密码会被拒绝。 用户不在 MFA 会话中
 auth.mfa.waiting-for-passkey-input: 等待浏览器的交互输入...
 auth.mfa.passkeys-help: 添加通行密钥以登录您的帐户并用作 MFA 方法。
 flash.auth.passkey-registred: 密钥 %s 已注册
@@ -745,7 +746,8 @@ explore.users.sort-joined-asc: 最早加入
 explore.users.sort-joined-desc: 最新加入
 explore.users.sort-username-asc: 用户名（A → Z）
 explore.users.sort-username-desc: 用户名（Z → A）
-flash.auth.oauth-already-linked: 该 %s 账号已关联到其他用户
+flash.auth.oauth-already-linked:
+flash.auth.oauth-unlink-only-login-method: 这是你唯一的登录方式，无法解除绑定。 该 %s 账号已关联到其他用户
 flash.auth.oauth-session-expired: OAuth2 会话已过期，请重试
 flash.gist.archived: Gist 已归档
 flash.gist.unarchived: Gist 已取消归档

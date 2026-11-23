@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/ipc"
-	"github.com/LiuShen-Fork/QingyuGist/internal/ssh"
+	"github.com/qingyu-org/Gist/internal/ipc"
+	"github.com/qingyu-org/Gist/internal/ssh"
 	"github.com/urfave/cli/v2"
 )
 

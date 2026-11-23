@@ -6,8 +6,8 @@ Assuming you have [Make](https://linux.die.net/man/1/make) installed,
 
 ```shell
 # Clone the repository
-git clone git@github.com:LiuShen-Fork/QingyuGist.git
-cd qingyugist
+git clone git@github.com:qingyu-org/Gist.git
+cd Gist
 
 # Build the development image
 make build_dev_docker
@@ -30,8 +30,8 @@ Requirements:
 * [Make](https://linux.die.net/man/1/make) (optional, but easier)
 
 ```shell
-git clone git@github.com:LiuShen-Fork/QingyuGist.git
-cd qingyugist
+git clone git@github.com:qingyu-org/Gist.git
+cd Gist
 make install
 make watch
 ```

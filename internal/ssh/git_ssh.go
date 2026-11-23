@@ -6,10 +6,10 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/auth"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/moderation"
+	"github.com/qingyu-org/Gist/internal/auth"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/moderation"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
@@ -40,7 +40,7 @@ func AuthorizeGitCommand(gitCmd string, key string, ip string) (*db.Gist, string
 	gistName := strings.TrimSuffix(strings.ToLower(repoFields[1]), ".git")
 
 	gist, err := db.GetGist(userName, gistName)
-	if err != nil {
+	if err != nil || gist.IsExpired() {
 		return nil, "", errors.New("gist not found")
 	}
 

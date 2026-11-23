@@ -3,8 +3,8 @@ package git
 import (
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/web/context"
 	"github.com/rs/zerolog/log"
 )
 
@@ -67,6 +67,12 @@ func handlePush(ctx *context.Context, route *gitRoute, gist *db.Gist, gistExists
 	if pathParts[0] != username || len(pathParts) != 4 {
 		log.Debug().Str("authUsername", username).Any("path", pathParts).Msg("Invalid URL format for push operation")
 		return ctx.PlainText(401, "Invalid URL format for push operation")
+	}
+
+	// An expired gist keeps its name until the background job deletes it.
+	if gist.IsExpired() {
+		log.Debug().Str("authUsername", username).Msg("Pushing to expired gist")
+		return ctx.PlainText(404, "Check your credentials or make sure you have access to the Gist")
 	}
 
 	log.Debug().Str("authUsername", username).Msg("Valid URL format for push operation")

@@ -7,12 +7,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/moderation"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/api/v1/types"
 	"github.com/google/uuid"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/moderation"
+	"github.com/qingyu-org/Gist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/web/handlers/api/v1/types"
 )
 
 // strOrEmpty dereferences an optional string field, returning "" when nil.
@@ -234,6 +234,9 @@ func UpdateGist(ctx *context.Context) error {
 	if awaitingModeration {
 		moderation.Enqueue(g.ID)
 	}
+	// Index last: AddInIndex reads g from a goroutine, so g must not be
+	// written to afterwards.
+	g.AddInIndex()
 
 	resp, err := g.ToAPI(apiBaseURL(ctx), "HEAD")
 	if err != nil {

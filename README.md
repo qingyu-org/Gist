@@ -10,14 +10,14 @@ Every gist is a real Git repository: write it in the browser, or clone it and pu
 <p>
 <a href="README.zh-CN.md">简体中文</a> ·
 <a href="docs/">Documentation</a> ·
-<a href="https://github.com/LiuShen-Fork/QingyuGist/releases/latest">Releases</a>
+<a href="https://github.com/qingyu-org/Gist/releases/latest">Releases</a>
 </p>
 
 <p>
-<img alt="CI" src="https://github.com/LiuShen-Fork/QingyuGist/actions/workflows/ci.yml/badge.svg?branch=master">
-<img alt="Release" src="https://img.shields.io/github/v/release/LiuShen-Fork/QingyuGist?color=teal">
-<img alt="License" src="https://img.shields.io/github/license/LiuShen-Fork/QingyuGist?color=blue">
-<img alt="Go" src="https://img.shields.io/github/go-mod/go-version/LiuShen-Fork/QingyuGist">
+<img alt="CI" src="https://github.com/qingyu-org/Gist/actions/workflows/ci.yml/badge.svg?branch=master">
+<img alt="Release" src="https://img.shields.io/github/v/release/qingyu-org/Gist?color=teal">
+<img alt="License" src="https://img.shields.io/github/license/qingyu-org/Gist?color=blue">
+<img alt="Go" src="https://img.shields.io/github/go-mod/go-version/qingyu-org/Gist">
 </p>
 
 <a href="docs/public/qingyugist-demo.png"><img src="docs/public/qingyugist-demo.png" width="900" alt="A gist with a Markdown preview"></a>
@@ -66,13 +66,13 @@ experience.
 Images are published to GitHub Container Registry on every release:
 
 ```shell
-docker pull ghcr.io/liushen-fork/qingyugist:latest
+docker pull ghcr.io/qingyu-org/qingyugist:latest
 ```
 
 ```yaml
 services:
   qingyugist:
-    image: ghcr.io/liushen-fork/qingyugist:latest
+    image: ghcr.io/qingyu-org/qingyugist:latest
     container_name: qingyugist
     restart: unless-stopped
     ports:
@@ -91,7 +91,7 @@ administrator.
 ### Prebuilt binary
 
 Download the archive for your platform from the
-[latest release](https://github.com/LiuShen-Fork/QingyuGist/releases/latest), then:
+[latest release](https://github.com/qingyu-org/Gist/releases/latest), then:
 
 ```shell
 tar xzf qingyugist-<version>-linux-amd64.tar.gz
@@ -107,8 +107,8 @@ boot-time values are read from `QYG_*` environment variables.
 Requirements: Go 1.27+, Node.js 26+, Git 2.28+ and Make.
 
 ```shell
-git clone https://github.com/LiuShen-Fork/QingyuGist.git
-cd QingyuGist
+git clone https://github.com/qingyu-org/Gist.git
+cd Gist
 make
 ./qingyugist
 ```
@@ -144,7 +144,7 @@ same data:
   sessions end with the cookie rename, so users simply sign in again.
 
 Two things need a manual update: the executable is now called `qingyugist` (check your
-systemd unit) and the image is `ghcr.io/liushen-fork/qingyugist`. To roll back, restore the
+systemd unit) and the image is `ghcr.io/qingyu-org/qingyugist`. To roll back, restore the
 backup or rename the database back to its previous name.
 
 ## Development

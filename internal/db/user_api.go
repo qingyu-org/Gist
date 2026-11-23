@@ -3,7 +3,7 @@ package db
 import (
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/api/v1/types"
+	"github.com/qingyu-org/Gist/internal/web/handlers/api/v1/types"
 )
 
 // AvatarURLBuilder turns a Gravatar hash into the picture URL the site uses.

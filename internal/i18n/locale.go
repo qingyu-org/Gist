@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/i18n/locales"
+	"github.com/qingyu-org/Gist/internal/i18n/locales"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"golang.org/x/text/language/display"

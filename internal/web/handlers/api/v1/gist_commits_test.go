@@ -5,9 +5,9 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/api/v1/types"
-	webtest "github.com/LiuShen-Fork/QingyuGist/internal/web/test"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/web/handlers/api/v1/types"
+	webtest "github.com/qingyu-org/Gist/internal/web/test"
 	"github.com/stretchr/testify/require"
 )
 

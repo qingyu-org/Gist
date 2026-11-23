@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/auth/oauth"
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/i18n"
-	"github.com/LiuShen-Fork/QingyuGist/internal/validator"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
 	"github.com/gorilla/sessions"
+	"github.com/qingyu-org/Gist/internal/auth/oauth"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/i18n"
+	"github.com/qingyu-org/Gist/internal/validator"
+	"github.com/qingyu-org/Gist/internal/web/context"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
@@ -184,6 +184,7 @@ func OauthCallback(ctx *context.Context) error {
 
 	sess.Values["user"] = userDB.ID
 	sess.Options.MaxAge = 60 * 60 * 24 * 365 // 1 year
+	sess.Values["sessionVersion"] = userDB.SessionVersion
 	ctx.SaveSession(sess)
 	ctx.DeleteCsrfCookie()
 
@@ -324,6 +325,7 @@ func ProcessOauthRegister(ctx *context.Context) error {
 	delete(sess.Values, oauthInvitationSessionKey)
 
 	sess.Values["user"] = userDB.ID
+	sess.Values["sessionVersion"] = userDB.SessionVersion
 	sess.Options.MaxAge = 60 * 60 * 24 * 365 // 1 year
 	ctx.SaveSession(sess)
 	ctx.DeleteCsrfCookie()
@@ -341,10 +343,12 @@ func OauthUnlink(ctx *context.Context) error {
 	currUser := ctx.User
 
 	if provider.UserHasProvider(currUser) {
-		// Accounts created through a provider have no password; unlinking the
-		// last identity would leave them with no way back in.
-		if currUser.Password == "" && currUser.LinkedProviderCount() <= 1 {
-			ctx.AddFlash(ctx.Tr("flash.auth.cannot-unlink-last"), "error")
+		canLogin, err := hasOtherLoginMethod(ctx, currUser, providerStr)
+		if err != nil {
+			return ctx.ErrorRes(500, "Cannot check for user login methods", err)
+		}
+		if !canLogin {
+			ctx.AddFlash(ctx.Tr("flash.auth.oauth-unlink-only-login-method"), "error")
 			return ctx.RedirectTo("/settings/authentication")
 		}
 
@@ -357,4 +361,32 @@ func OauthUnlink(ctx *context.Context) error {
 	}
 
 	return ctx.RedirectTo("/settings")
+}
+
+// hasOtherLoginMethod reports whether the user can still log in once the given
+// provider is unlinked: through another linked provider configured on this
+// instance, or through the login form with a password or a passkey. LDAP is not
+// counted, as a user without a password may have no directory entry.
+func hasOtherLoginMethod(ctx *context.Context, user *db.User, provider string) (bool, error) {
+	linked := map[string]bool{
+		oauth.GitHubProviderString: user.GithubID != "" && ctx.GetData("githubOauth") == true,
+		oauth.GitLabProviderString: user.GitlabID != "" && ctx.GetData("gitlabOauth") == true,
+		oauth.GiteaProviderString:  user.GiteaID != "" && ctx.GetData("giteaOauth") == true,
+		oauth.OpenIDConnectString:  user.OIDCID != "" && ctx.GetData("oidcOauth") == true,
+	}
+	for other, usable := range linked {
+		if usable && other != provider {
+			return true, nil
+		}
+	}
+
+	if ctx.GetData("DisableLoginForm") == true {
+		return false, nil
+	}
+	if user.Password != "" {
+		return true, nil
+	}
+
+	hasPasskey, _, err := user.HasMFA()
+	return hasPasskey, err
 }

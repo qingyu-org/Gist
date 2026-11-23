@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/auth/password"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/index"
+	"github.com/qingyu-org/Gist/internal/auth/password"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/index"
 	"github.com/stretchr/testify/require"
 	"github.com/urfave/cli/v2"
 )
@@ -176,6 +176,27 @@ func TestCmdAdminCreateUser_PasswordStdin(t *testing.T) {
 func TestCmdAdminCreateUser_PasswordStdinAndFlagMutuallyExclusive(t *testing.T) {
 	err := runCreateUser(t, "--username", "x", "--password", "pw", "--password-stdin")
 	require.Error(t, err)
+}
+
+func TestCmdAdminResetPassword(t *testing.T) {
+	require.NoError(t, runCreateUser(t, "--username", "bob", "--password", "oldpass"))
+
+	app := &cli.App{
+		Name: "opengist",
+		Commands: []*cli.Command{
+			{Name: "start", Action: func(*cli.Context) error { return nil }},
+			{Name: "admin", Subcommands: []*cli.Command{&CmdAdminResetPassword}},
+		},
+		DefaultCommand: "start",
+	}
+	require.NoError(t, app.Run([]string{"opengist", "admin", "reset-password", "bob", "newpass"}))
+
+	user, err := db.GetUserByUsername("bob")
+	require.NoError(t, err)
+	match, err := password.VerifyPassword("newpass", user.Password)
+	require.NoError(t, err)
+	require.True(t, match, "new password should verify")
+	require.Equal(t, uint(1), user.SessionVersion, "the user's existing sessions should be logged out")
 }
 
 func TestGravatarHash(t *testing.T) {

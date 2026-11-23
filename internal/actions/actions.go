@@ -8,12 +8,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/index"
-	"github.com/LiuShen-Fork/QingyuGist/internal/settings"
-	"github.com/LiuShen-Fork/QingyuGist/internal/ssh"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/index"
+	"github.com/qingyu-org/Gist/internal/settings"
+	"github.com/qingyu-org/Gist/internal/ssh"
 	"github.com/rs/zerolog/log"
 )
 

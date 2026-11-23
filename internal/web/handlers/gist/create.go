@@ -9,15 +9,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/i18n"
-	"github.com/LiuShen-Fork/QingyuGist/internal/moderation"
-	"github.com/LiuShen-Fork/QingyuGist/internal/settings"
-	"github.com/LiuShen-Fork/QingyuGist/internal/validator"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
 	"github.com/google/uuid"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/i18n"
+	"github.com/qingyu-org/Gist/internal/moderation"
+	"github.com/qingyu-org/Gist/internal/settings"
+	"github.com/qingyu-org/Gist/internal/validator"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 func Create(ctx *context.Context) error {

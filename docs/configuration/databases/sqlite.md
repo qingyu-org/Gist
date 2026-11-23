@@ -30,7 +30,7 @@ QYG_SQLITE_JOURNAL_MODE=WAL
 ```yml
 services:
   qingyugist:
-    image: ghcr.io/liushen-fork/qingyugist:latest
+    image: ghcr.io/qingyu-org/qingyugist:latest
     container_name: qingyugist
     restart: unless-stopped
     ports:

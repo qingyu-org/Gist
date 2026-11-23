@@ -3,7 +3,7 @@ package actions
 import (
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/settings"
+	"github.com/qingyu-org/Gist/internal/settings"
 	"github.com/robfig/cron/v3"
 	"github.com/rs/zerolog/log"
 )
@@ -26,6 +26,11 @@ func StartCron() (stop func()) {
 			log.Error().Err(err).Msgf("Invalid cron spec %q for action %d", a.spec, actionType)
 		}
 	}
+
+	// Scheduled actions first run one interval after startup, so an instance
+	// restarted more often than that would never delete its expired gists:
+	// also delete them right away.
+	c.Schedule(&atStartup{}, cron.FuncJob(func() { RunOnce(DeleteExpiredGists) }))
 
 	c.Start()
 
@@ -54,6 +59,18 @@ func StartCron() (stop func()) {
 			log.Warn().Msg("cron: timed out waiting for jobs to finish")
 		}
 	}
+}
+
+// atStartup is a cron schedule that fires once, when the scheduler starts. Going
+// through the scheduler lets the stop function wait for that run too.
+type atStartup struct{ fired bool }
+
+func (s *atStartup) Next(t time.Time) time.Time {
+	if s.fired {
+		return time.Time{}
+	}
+	s.fired = true
+	return t
 }
 
 type cronLogger struct{}

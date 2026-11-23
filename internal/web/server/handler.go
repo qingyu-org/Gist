@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
 	"github.com/labstack/echo/v4"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 type Handler func(ctx *context.Context) error

@@ -3,7 +3,7 @@ package settings
 import (
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
+	"github.com/qingyu-org/Gist/internal/config"
 )
 
 // The third-party sign-in providers the admin panel can configure.

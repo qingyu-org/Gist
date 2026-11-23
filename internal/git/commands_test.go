@@ -2,7 +2,7 @@ package git
 
 import (
 	"bufio"
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
+	"github.com/qingyu-org/Gist/internal/config"
 	"github.com/stretchr/testify/require"
 	"os"
 	"os/exec"

@@ -3,17 +3,14 @@ package settings
 import (
 	"crypto/md5"
 	"fmt"
-	"os"
-	"path/filepath"
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/i18n"
-	qingyugistssh "github.com/LiuShen-Fork/QingyuGist/internal/ssh"
-	"github.com/LiuShen-Fork/QingyuGist/internal/validator"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/i18n"
+	qingyugistssh "github.com/qingyu-org/Gist/internal/ssh"
+	"github.com/qingyu-org/Gist/internal/validator"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 func EmailProcess(ctx *context.Context) error {
@@ -74,16 +71,8 @@ func UsernameProcess(ctx *context.Context) error {
 		}
 	}
 
-	sourceDir := filepath.Join(config.GetHomeDir(), git.ReposDirectory, strings.ToLower(user.Username))
-	destinationDir := filepath.Join(config.GetHomeDir(), git.ReposDirectory, strings.ToLower(dto.Username))
-
-	if sourceDir != destinationDir {
-		if _, err := os.Stat(sourceDir); !os.IsNotExist(err) {
-			err := os.Rename(sourceDir, destinationDir)
-			if err != nil {
-				return ctx.ErrorRes(500, "Cannot rename user directory", err)
-			}
-		}
+	if err := git.RenameUserDirectory(user.Username, dto.Username); err != nil {
+		return ctx.ErrorRes(500, "Cannot rename user directory", err)
 	}
 
 	user.Username = dto.Username

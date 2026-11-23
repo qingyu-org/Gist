@@ -4,7 +4,7 @@ After running QingyuGist at least once, you can import your Gists from GitHub us
 
 ```shell
 github_user=user # replace with your GitHub username
-qingyugist_url="http://user:password@qingyugist.url/init" # replace user, password and QingyuGist url
+qingyugist_url="http://user:password@qingyugist.url/init" # replace user, password (an access token if MFA is enabled) and QingyuGist url
 
 curl -s https://api.github.com/users/"$github_user"/gists?per_page=100 | jq '.[] | .git_pull_url' -r | while read url; do 
     git clone "$url"

@@ -31,7 +31,7 @@ db-uri: postgres://postgres:passwd@/qingyugist_db?socket=/var/run/postgresql
 ```yml
 services:
   qingyugist:
-    image: ghcr.io/liushen-fork/qingyugist:latest
+    image: ghcr.io/qingyu-org/qingyugist:latest
     container_name: qingyugist
     restart: unless-stopped
     depends_on:

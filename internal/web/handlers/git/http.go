@@ -4,11 +4,11 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/auth"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers"
+	"github.com/qingyu-org/Gist/internal/auth"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/git"
+	"github.com/qingyu-org/Gist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/web/handlers"
 	"github.com/rs/zerolog/log"
 )
 
@@ -43,15 +43,29 @@ func GitHttp(ctx *context.Context) error {
 		return ctx.NotFound("Gist not found") // regular 404 for non-git routes
 	}
 
-	gist := ctx.GetData("gist").(*db.Gist)
+	gist := ctx.Get("gist").(*db.Gist)
 	gistExists := gist.ID != 0
 
+	// Expired gists are removed by a background job, but it may not have run
+	// yet: handle them as gists that don't exist, except that handlePush won't
+	// create a new gist in place of one.
+	if gist.IsExpired() {
+		gistExists = false
+	}
+
 	initKind, initToken := classifyInitRequest(ctx.Request().URL.Path)
+
+	// The matched route decides whether the request is a pull or a push, so it
+	// is always authorized for the handler that will serve it. Only info/refs
+	// names the service in the query string; git never sends that parameter
+	// elsewhere, so it is refused rather than allowed to disagree with the route.
+	service := ctx.QueryParam("service")
 	isInfoRefs := strings.HasSuffix(route.gitUrl, "/info/refs$")
-	isPull := ctx.QueryParam("service") == "git-upload-pack" ||
-		strings.HasSuffix(ctx.Request().URL.Path, "git-upload-pack") && !isInfoRefs
-	isPush := ctx.QueryParam("service") == "git-receive-pack" ||
-		strings.HasSuffix(ctx.Request().URL.Path, "git-receive-pack") && !isInfoRefs
+	if service != "" && !isInfoRefs {
+		return ctx.PlainText(400, "Invalid service parameter")
+	}
+	isPull := strings.HasSuffix(route.gitUrl, "/git-upload-pack$") || isInfoRefs && service == "git-upload-pack"
+	isPush := strings.HasSuffix(route.gitUrl, "/git-receive-pack$") || isInfoRefs && service == "git-receive-pack"
 
 	// Anything that is neither an init request, a smart pull, nor a push is a
 	// dumb-protocol read: GET .../info/refs (no service), .../HEAD,
@@ -100,7 +114,7 @@ func GitHttp(ctx *context.Context) error {
 // setGistContext points the request at a specific gist and its repository path,
 // overriding whatever the soft-init middleware put in place.
 func setGistContext(ctx *context.Context, gist *db.Gist) {
-	ctx.SetData("gist", gist)
+	ctx.Set("gist", gist)
 	ctx.SetData("repositoryPath", git.RepositoryPath(gist.User.Username, gist.Uuid))
 }
 

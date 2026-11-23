@@ -8,7 +8,6 @@ import (
 	"strings"
 	"sync/atomic"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
 	"github.com/blevesearch/bleve/v2"
 	"github.com/blevesearch/bleve/v2/analysis/analyzer/custom"
 	"github.com/blevesearch/bleve/v2/analysis/lang/cjk"
@@ -18,6 +17,7 @@ import (
 	"github.com/blevesearch/bleve/v2/analysis/token/unicodenorm"
 	"github.com/blevesearch/bleve/v2/analysis/tokenizer/unicode"
 	"github.com/blevesearch/bleve/v2/search/query"
+	"github.com/qingyu-org/Gist/internal/config"
 	"github.com/rs/zerolog/log"
 )
 

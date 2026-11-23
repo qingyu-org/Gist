@@ -4,7 +4,7 @@ CHECKSUMS_FILE="build/checksums.txt"
 BINARY_NAME="qingyugist"
 TARGETS="darwin/amd64 darwin/arm64 linux/amd64 linux/arm64 linux/armv6 linux/armv7 linux/386 windows/amd64"
 VERSION=$(git describe --tags | sed 's/^v//')
-VERSION_PKG="github.com/LiuShen-Fork/QingyuGist/internal/config.QingyuGistVersion"
+VERSION_PKG="github.com/qingyu-org/Gist/internal/config.QingyuGistVersion"
 
 if [ -z "$VERSION" ]; then
     echo "Error: Could not retrieve version from git tags. Exiting..."

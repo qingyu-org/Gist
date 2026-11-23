@@ -6,9 +6,9 @@ package lang
 import (
 	"path/filepath"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/git"
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/lexers"
+	"github.com/qingyu-org/Gist/internal/git"
 )
 
 // Parse returns the language label for a file (e.g. "Go", "Markdown", "SVG",

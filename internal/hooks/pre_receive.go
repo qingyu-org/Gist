@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/ipc"
+	"github.com/qingyu-org/Gist/internal/ipc"
 )
 
 // PreReceive is the client side of the pre-receive hook. It runs in the

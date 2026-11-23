@@ -3,10 +3,10 @@ package gist
 import (
 	"strconv"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/moderation"
-	"github.com/LiuShen-Fork/QingyuGist/internal/render"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/moderation"
+	"github.com/qingyu-org/Gist/internal/render"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 func Edit(ctx *context.Context) error {

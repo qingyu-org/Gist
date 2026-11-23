@@ -176,7 +176,10 @@
                         {{ if .userLogged.IsAdmin }}<a href="{{ .c.ExternalUrl }}/admin" role="menuitem">{{ .locale.Tr "header.menu.admin" }}</a>{{ end }}
                         <a href="{{ .c.ExternalUrl }}/settings" role="menuitem">{{ .locale.Tr "header.menu.settings" }}</a>
                         <hr role="separator" />
-                        <a href="{{ .c.ExternalUrl }}/logout" role="menuitem" class="text-destructive">{{ .locale.Tr "header.menu.logout" }}</a>
+                        <form method="post" action="{{ .c.ExternalUrl }}/logout">
+                            {{ .csrfHtml }}
+                            <button type="submit" role="menuitem" class="text-destructive">{{ .locale.Tr "header.menu.logout" }}</button>
+                        </form>
                     </div>
                 </div>
             </div>

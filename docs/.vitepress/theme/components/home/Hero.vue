@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
-const version = 'v1.15'
-const dockerCommand = 'docker run -p 6157:6157 -v "$HOME/.qingyugist:/qingyugist" ghcr.io/liushen-fork/qingyugist:latest'
+const version = 'v1.3'
+const dockerCommand = 'docker run -p 6157:6157 -v "$HOME/.qingyugist:/qingyugist" ghcr.io/qingyu-org/qingyugist:latest'
 
 const stars = ref(null)
 const formattedStars = computed(() => {
@@ -27,7 +27,7 @@ onMounted(async () => {
   } catch {}
 
   try {
-    const res = await fetch('https://api.github.com/repos/LiuShen-Fork/QingyuGist')
+    const res = await fetch('https://api.github.com/repos/qingyu-org/Gist')
     if (res.ok) {
       stars.value = (await res.json()).stargazers_count
       try {
@@ -56,12 +56,12 @@ onBeforeUnmount(() => clearTimeout(timer))
   <section class="og-hero">
     <a
       class="og-badge"
-      href="https://github.com/LiuShen-Fork/QingyuGist/releases"
+      href="https://github.com/qingyu-org/Gist/releases"
       target="_blank"
       rel="noopener noreferrer"
     >
       <span class="og-badge__dot" />
-      {{ version }} released: Major UI rework
+      {{ version }} released: Gist comments + security fixes
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="og-badge__arrow">
         <path stroke-linecap="round" stroke-linejoin="round" d="m9 6 6 6-6 6" />
       </svg>
@@ -69,7 +69,7 @@ onBeforeUnmount(() => clearTimeout(timer))
 
     <img
       class="og-logo"
-      src="https://raw.githubusercontent.com/LiuShen-Fork/QingyuGist/master/public/img/qingyugist.svg"
+      src="https://raw.githubusercontent.com/qingyu-org/Gist/master/public/img/qingyugist.svg"
       alt="QingyuGist"
     />
 
@@ -88,7 +88,7 @@ onBeforeUnmount(() => clearTimeout(timer))
       </a>
       <a
         class="og-btn og-btn--github"
-        href="https://github.com/LiuShen-Fork/QingyuGist"
+        href="https://github.com/qingyu-org/Gist"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="QingyuGist on GitHub"

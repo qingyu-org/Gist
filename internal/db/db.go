@@ -15,7 +15,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm/logger"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
+	"github.com/qingyu-org/Gist/internal/config"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )

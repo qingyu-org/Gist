@@ -1,11 +1,11 @@
 package settings
 
 import (
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/i18n"
-	qingyugistssh "github.com/LiuShen-Fork/QingyuGist/internal/ssh"
-	"github.com/LiuShen-Fork/QingyuGist/internal/validator"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/i18n"
+	qingyugistssh "github.com/qingyu-org/Gist/internal/ssh"
+	"github.com/qingyu-org/Gist/internal/validator"
+	"github.com/qingyu-org/Gist/internal/web/context"
 	"golang.org/x/crypto/ssh"
 	"strconv"
 	"strings"

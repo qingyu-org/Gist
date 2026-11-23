@@ -8,10 +8,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/settings"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
 	"github.com/google/uuid"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/settings"
+	"github.com/qingyu-org/Gist/internal/web/context"
 )
 
 var uuidRegex = regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`)

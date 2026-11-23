@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/i18n"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v4"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/i18n"
 	"github.com/rs/zerolog/log"
 )
 

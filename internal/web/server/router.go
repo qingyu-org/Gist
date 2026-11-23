@@ -8,22 +8,22 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/index"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/context"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/admin"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/api"
-	apiv1 "github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/api/v1"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/auth"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/gist"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/git"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/health"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/ipc"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/notification"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/settings"
-	"github.com/LiuShen-Fork/QingyuGist/public"
 	"github.com/labstack/echo/v4"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/index"
+	"github.com/qingyu-org/Gist/internal/web/context"
+	"github.com/qingyu-org/Gist/internal/web/handlers/admin"
+	"github.com/qingyu-org/Gist/internal/web/handlers/api"
+	apiv1 "github.com/qingyu-org/Gist/internal/web/handlers/api/v1"
+	"github.com/qingyu-org/Gist/internal/web/handlers/auth"
+	"github.com/qingyu-org/Gist/internal/web/handlers/gist"
+	"github.com/qingyu-org/Gist/internal/web/handlers/git"
+	"github.com/qingyu-org/Gist/internal/web/handlers/health"
+	"github.com/qingyu-org/Gist/internal/web/handlers/ipc"
+	"github.com/qingyu-org/Gist/internal/web/handlers/notification"
+	"github.com/qingyu-org/Gist/internal/web/handlers/settings"
+	"github.com/qingyu-org/Gist/public"
 )
 
 func (s *Server) registerRoutes() {
@@ -45,12 +45,12 @@ func (s *Server) registerRoutes() {
 		r.POST("/register", auth.ProcessRegister)
 		r.GET("/login", auth.Login)
 		r.POST("/login", auth.ProcessLogin)
-		r.GET("/logout", auth.Logout)
+		r.POST("/logout", auth.Logout)
 		r.GET("/oauth/register", auth.OauthRegister, inOAuthRegisterSession)
 		r.POST("/oauth/register", auth.ProcessOauthRegister, inOAuthRegisterSession)
 		r.GET("/oauth/:provider", auth.Oauth)
 		r.GET("/oauth/:provider/callback", auth.OauthCallback)
-		r.GET("/oauth/:provider/unlink", auth.OauthUnlink, logged)
+		r.POST("/oauth/:provider/unlink", auth.OauthUnlink, logged)
 		r.POST("/webauthn/bind", auth.BeginWebAuthnBinding, logged)
 		r.POST("/webauthn/bind/finish", auth.FinishWebAuthnBinding, logged)
 		r.POST("/webauthn/login", auth.BeginWebAuthnLogin)
@@ -225,7 +225,9 @@ func (s *Server) registerRoutes() {
 		// shared links and git remotes keep working after the URL cleanup.
 		r.Any("/-/login", redirectLegacy("/login"))
 		r.Any("/-/register", redirectLegacy("/register"))
-		r.Any("/-/logout", redirectLegacy("/logout"))
+		// Logging out only works through a POST now, so the legacy path must
+		// not turn a GET into one.
+		r.POST("/-/logout", redirectLegacy("/logout"))
 		r.Any("/-/settings", redirectLegacy("/settings"))
 		r.Any("/-/settings/*", redirectLegacyPrefix("/-/settings", "/settings"))
 		r.Any("/-/admin-panel", redirectLegacy("/admin"))
@@ -287,7 +289,7 @@ func (s *Server) registerRoutes() {
 
 		// if the custom file is an .html template, render it
 		if strings.HasSuffix(ctx.Param("*"), ".html") {
-			if err := ctx.Html(ctx.Param("*")); err != nil {
+			if err := ctx.Html(customPagePrefix + ctx.Param("*")); err != nil {
 				return ctx.NotFound("Page not found")
 			}
 			return nil

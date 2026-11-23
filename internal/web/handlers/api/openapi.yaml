@@ -21,7 +21,7 @@ info:
     per-resource scopes (gist, user) at read or read/write level.
   license:
     name: AGPL-3.0
-    url: https://github.com/LiuShen-Fork/QingyuGist/blob/master/LICENSE
+    url: https://github.com/qingyu-org/Gist/blob/master/LICENSE
 
 servers:
   - url: /api

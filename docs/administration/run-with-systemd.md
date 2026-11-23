@@ -58,7 +58,7 @@ systemctl status qingyugist
 **NOTE: This was tested on Ubuntu 20.04 and newer. For other distros, please check the respective documentation**  
 
 #### For the purpose of this documentation, we will assume that:
-- You've followed the instructions on how to run qingyugist [from source](https://github.com/LiuShen-Fork/QingyuGist?tab=readme-ov-file#from-source)
+- You've followed the instructions on how to run qingyugist [from source](https://github.com/qingyu-org/Gist?tab=readme-ov-file#from-source)
 - Your shell user is named `pastebin`
 - All commands are being executed as the `pastebin` user
 

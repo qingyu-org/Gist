@@ -1,12 +1,14 @@
 package v1_test
 
 import (
+	"encoding/json"
+	"strconv"
 	"testing"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/db"
-	"github.com/LiuShen-Fork/QingyuGist/internal/web/handlers/api/v1/types"
-	webtest "github.com/LiuShen-Fork/QingyuGist/internal/web/test"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/db"
+	"github.com/qingyu-org/Gist/internal/web/handlers/api/v1/types"
+	webtest "github.com/qingyu-org/Gist/internal/web/test"
 	"github.com/stretchr/testify/require"
 )
 
@@ -133,6 +135,45 @@ func TestListGists_Anonymous_OnlyPublicFromEveryone(t *testing.T) {
 	for _, g := range arr {
 		require.Equal(t, "public", g.Visibility, "non-public gist leaked into anonymous response: %+v", g)
 	}
+}
+
+// TestListGists_ExcludesExpired - expired gists not yet deleted by the
+// background job are left out of the list endpoints and their totals,
+// including their owner's own list.
+func TestListGists_ExcludesExpired(t *testing.T) {
+	f := setupListVisibility(t)
+	callerTok := f.s.CreateAccessToken(t, "list", db.ReadPermission, db.ReadPermission)
+	f.s.Logout()
+
+	expireGist(t, f.callerPub)
+	expireGist(t, f.callerPriv)
+
+	for _, c := range []struct {
+		uri  string
+		want []*db.Gist
+	}{
+		{"/api/gists/public", []*db.Gist{f.otherPub}},
+		{"/api/gists", []*db.Gist{f.otherPub}},
+		{"/api/users/caller/gists", nil},
+	} {
+		t.Run(c.uri, func(t *testing.T) {
+			w, body := f.s.APIRequest(t, "GET", c.uri, "", nil, 200)
+			var arr []types.GistSimple
+			require.NoError(t, json.Unmarshal(body, &arr))
+			ids := idSet(arr)
+			require.Len(t, ids, len(c.want))
+			for _, g := range c.want {
+				require.True(t, ids[g.Uuid])
+			}
+			require.Equal(t, strconv.Itoa(len(c.want)), w.Header().Get("X-Total"))
+		})
+	}
+
+	// The owner doesn't see them in their own list either.
+	arr, _ := apiList[types.GistSimple](t, f.s, "/api/gists", callerTok, 200)
+	ids := idSet(arr)
+	require.Len(t, ids, 1)
+	require.True(t, ids[f.callerUnl.Uuid])
 }
 
 // TestListGists_TokenWithoutGistRead_OnlyCallerPublic - caller authenticates

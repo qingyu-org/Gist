@@ -6,10 +6,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/LiuShen-Fork/QingyuGist/internal/config"
-	"github.com/LiuShen-Fork/QingyuGist/internal/session"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/goth/gothic"
+	"github.com/qingyu-org/Gist/internal/config"
+	"github.com/qingyu-org/Gist/internal/session"
 )
 
 var gothicStoreOnce sync.Once
