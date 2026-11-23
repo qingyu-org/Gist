@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/public/qingyugist-mark.png?v=1.1.1" width="72" height="72" alt="QingyuGist">
+<img src="docs/public/qingyugist-mark.png?v=1.3.0" width="72" height="72" alt="QingyuGist">
 
 <h1>清羽 Gist</h1>
 
